@@ -3,7 +3,7 @@ name: Deploy to VM
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
@@ -15,15 +15,18 @@ jobs:
 
       - name: Deploy using Docker Compose
         run: |
-          echo "Starting deployment"
+          echo "Starting deployment..."
 
           cd /home/jojo/deploy
 
-          git fetch origin master
-          git reset --hard origin/master
+          echo "Pulling latest code..."
+          git fetch origin main
+          git reset --hard origin/main
 
+          echo "Building containers..."
           docker compose up -d --build
 
+          echo "Cleaning unused images..."
           docker image prune -f
 
-          echo "Deployment completed"
+          echo "Deployment completed successfully"
